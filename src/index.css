@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+/* ícone do seletor nativo de <input type="date"> — o app é todo em tema
+   escuro, então o ícone (preto por padrão no Chrome/Edge) precisa ser
+   invertido para branco para não sumir sobre o fundo dos campos */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}

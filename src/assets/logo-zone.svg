@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 64" fill="none" role="img" aria-label="Z-One logo">
+  <!-- Icon: rounded square with stylized Z and binary dot -->
+  <rect x="10" y="10" width="44" height="44" rx="10" stroke="white" stroke-width="2.5" fill="none"/>
+  <path d="M22 24h20M42 24L22 38M22 38h20" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="46" cy="46" r="2.5" fill="white"/>
+  <!-- Wordmark: Z-One as geometric vector paths -->
+  <!-- Z -->
+  <path d="M82 24h18M100 24L82 40M82 40h18" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- - -->
+  <line x1="108" y1="32" x2="118" y2="32" stroke="white" stroke-width="5" stroke-linecap="round"/>
+  <!-- O -->
+  <circle cx="130" cy="31" r="9" stroke="white" stroke-width="5" fill="none"/>
+  <!-- n -->
+  <path d="M150 40V26Q150 14 158 14Q166 14 166 26V40" stroke="white" stroke-width="5" stroke-linecap="round" fill="none"/>
+  <!-- e -->
+  <circle cx="186" cy="31" r="9" stroke="white" stroke-width="5" fill="none"/>
+  <line x1="178" y1="31" x2="194" y2="31" stroke="white" stroke-width="5" stroke-linecap="round"/>
+</svg>
