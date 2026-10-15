@@ -17,9 +17,10 @@ import {
 import { C } from "./theme/colors";
 import { useTheme } from "./theme/ThemeContext";
 import GlobalFonts from "./theme/GlobalFonts";
-import { MENU, PRESTADORES } from "./data/mock";
+import { MENU, PRESTADORES, ALERTAS } from "./data/mock";
 import MenuItem from "./components/MenuItem";
 import ProviderModal from "./components/ProviderModal";
+import AlertaLoginModal from "./components/AlertaLoginModal";
 import LoginScreen from "./pages/LoginScreen";
 import Dashboard from "./pages/Dashboard";
 import ConsultaRequisicoesPage from "./pages/ConsultaRequisicoesPage";
@@ -31,8 +32,17 @@ import RequisicaoGuiaProrrogacaoIntPage from "./pages/RequisicaoGuiaProrrogacaoI
 import RequisicaoGuiaOdontologicoPage from "./pages/RequisicaoGuiaOdontologicoPage";
 import ExecutarRequisicaoPage from "./pages/ExecutarRequisicaoPage";
 import DossieBeneficiarioPage from "./pages/DossieBeneficiarioPage";
+import AlertasNotificacoesPage from "./pages/AlertasNotificacoesPage";
+import EnviarLotePage from "./pages/EnviarLotePage";
 import EmConstrucaoPage from "./pages/EmConstrucaoPage";
-import type { Prestador, MenuNode } from "./types";
+import type { Prestador, MenuNode, Alerta } from "./types";
+
+// um alerta aparece no login se estiver ativo e a data de hoje estiver
+// dentro do período de vigência (comparação de string funciona pois as
+// datas são ISO yyyy-mm-dd, formato nativo do <input type="date">)
+function alertaVigente(a: Alerta, hojeIso: string): boolean {
+  return a.ativo && a.dataInicioVigencia <= hojeIso && hojeIso <= a.dataFimVigencia;
+}
 
 const REQUISICAO_FORM_PAGES: Record<RequisicaoGuiaFormId, React.ComponentType<{ onCancel: () => void }>> = {
   consulta: RequisicaoGuiaConsultaPage,
@@ -67,6 +77,7 @@ export default function App() {
   const [provider, setProvider] = useState<Prestador>(PRESTADORES[0]);
   const [notifOpen, setNotifOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [alertasLogin, setAlertasLogin] = useState<Alerta[]>([]);
   const notifRef = useRef<HTMLDivElement>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
 
@@ -89,6 +100,9 @@ export default function App() {
     setExpanded(new Set());
     setActiveItem("dashboard");
     setRequisicaoForm(null);
+    // alertas ativos e dentro da vigência aparecem em modal obrigatório logo após o login
+    const hojeIso = new Date().toISOString().slice(0, 10);
+    setAlertasLogin(ALERTAS.filter((a) => alertaVigente(a, hojeIso)));
     setLoggedIn(true);
   };
 
@@ -312,6 +326,10 @@ export default function App() {
         <main className="flex-1 overflow-y-auto p-6" style={{ backgroundColor: theme.contentBg }}>
           {activeItem === "beneficiario-dossie" ? (
             <DossieBeneficiarioPage />
+          ) : activeItem === "config-alertas" ? (
+            <AlertasNotificacoesPage />
+          ) : activeItem === "producao-enviar" ? (
+            <EnviarLotePage />
           ) : activeItem === "guias-analise" ? (
             <ConsultaRequisicoesPage />
           ) : activeItem === "guias-execucao-requisicao" ? (
@@ -367,6 +385,12 @@ export default function App() {
         onClose={() => setProviderModalOpen(false)}
         current={provider}
         onSelect={setProvider}
+      />
+
+      <AlertaLoginModal
+        open={alertasLogin.length > 0}
+        alertas={alertasLogin}
+        onFinish={() => setAlertasLogin([])}
       />
     </div>
   );

@@ -8,7 +8,7 @@ import {
   UserSearch,
 } from "lucide-react";
 import { C } from "../theme/colors";
-import type { Prestador, MenuNode, StatusInfo, GuiaStatus, GuiaResumo, GuiaSolicitada, TissInfo, BeneficiarioBusca } from "../types";
+import type { Prestador, MenuNode, StatusInfo, GuiaStatus, GuiaResumo, GuiaSolicitada, TissInfo, BeneficiarioBusca, Alerta } from "../types";
 
 /* ------------------------------------------------------------------ */
 /*  PRESTADORES                                                        */
@@ -117,6 +117,7 @@ export const MENU: MenuNode[] = [
     children: [
       { id: "config-usuarios", label: "Usuários" },
       { id: "config-perfil", label: "Meu perfil" },
+      { id: "config-alertas", label: "Alertas e notificações" },
     ],
   },
 ];
@@ -213,3 +214,36 @@ export const TISS_INFO: TissInfo = {
     { descricao: "tissSolicitacaoStatusAutorizacao", endereco: "https://seuendereco:porta.com.br/TISS40100OPS/tissSolicitacaoStatusAutorizacao" },
   ],
 };
+
+/* ------------------------------------------------------------------ */
+/*  ALERTAS E NOTIFICAÇÕES — Configurações > Alertas e notificações     */
+/*  Exibidos em modal obrigatório no login enquanto ativo e vigente.    */
+/*  Array mutável (mock sem backend): começa vazio de propósito — o     */
+/*  modal de login só deve aparecer para alertas criados pelo usuário.  */
+/*  adicionarAlerta/atualizarAlerta/removerAlerta mutam este array in-  */
+/*  place; tanto a listagem quanto o modal de login leem dele.          */
+/* ------------------------------------------------------------------ */
+export const ALERTAS: Alerta[] = [];
+
+// adiciona um novo alerta ao array mock (mutação in-place — sem backend real)
+export function adicionarAlerta(alerta: Omit<Alerta, "id">): Alerta {
+  const proximoId = ALERTAS.reduce((max, a) => Math.max(max, a.id), 0) + 1;
+  const novo: Alerta = { ...alerta, id: proximoId };
+  ALERTAS.push(novo);
+  return novo;
+}
+
+// atualiza um alerta existente pelo id (mutação in-place)
+export function atualizarAlerta(id: number, dados: Omit<Alerta, "id">): Alerta | undefined {
+  const indice = ALERTAS.findIndex((a) => a.id === id);
+  if (indice === -1) return undefined;
+  const atualizado: Alerta = { ...dados, id };
+  ALERTAS[indice] = atualizado;
+  return atualizado;
+}
+
+// remove um alerta pelo id (mutação in-place)
+export function removerAlerta(id: number): void {
+  const indice = ALERTAS.findIndex((a) => a.id === id);
+  if (indice !== -1) ALERTAS.splice(indice, 1);
+}

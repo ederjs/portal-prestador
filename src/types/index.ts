@@ -50,6 +50,19 @@ export interface BeneficiarioBusca {
   situacao: "Apto" | "Inapto" | "Suspenso";
 }
 
+/** Alerta/notificação cadastrado em Configurações > Alertas e notificações.
+ *  Exibido em modal obrigatório no login enquanto estiver `ativo` e a data
+ *  atual estiver dentro do período de vigência. Datas no formato ISO
+ *  (yyyy-mm-dd, valor nativo de `<input type="date">`). */
+export interface Alerta {
+  id: number;
+  titulo: string;
+  descricao: string;
+  dataInicioVigencia: string;
+  dataFimVigencia: string;
+  ativo: boolean;
+}
+
 /** As 5 guias TISS requisitáveis a partir da tela "Requisitar guia" e dos
  *  atalhos de acesso rápido no Dashboard. */
 export type RequisicaoGuiaFormId =
